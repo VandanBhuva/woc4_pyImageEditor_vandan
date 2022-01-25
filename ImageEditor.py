@@ -23,8 +23,22 @@ def open_func():
     img_canvas.image=final_img
 
 
+def crop_func(x1_val, x2_val, y1_val, y2_val):
+    global original_img, final_img, img_path, root_crop
+    root_crop.destroy()
+    original_img_arr = np.array(original_img)
+    w = original_img_arr.shape[1] 
+    h = original_img_arr.shape[0]
+
+    original_img_arr = original_img_arr[y1_val:h-y2_val,x1_val:w-x2_val]
+    original_img = Image.fromarray(original_img_arr)
+    final_img = ImageTk.PhotoImage(original_img)
+    img_canvas.create_image(500, 377, image=final_img)
+    img_canvas.image=final_img
+
+
 def crop_area_func():
-    global root_crop, x1, x2, y1, y2
+    global root_crop
     root_crop = Tk()
     root_crop.title("Crop Area")
 
@@ -36,9 +50,9 @@ def crop_area_func():
     x2_label.grid(row=2,column=0)
     y2_label = Label(root_crop, text="Bottom Right y-coordinate")
     y2_label.grid(row=3,column=0)
-    button = Button(root_crop, text="Crop", command=crop_func)
+    button = Button(root_crop, text="Crop")
     button.grid(row=4,column=0)
-
+    
     x1_input = Entry(root_crop)
     x1_input.grid(row=0,column=1)
     y1_input = Entry(root_crop)
@@ -48,28 +62,15 @@ def crop_area_func():
     y2_input = Entry(root_crop)
     y2_input.grid(row=3,column=1)
 
-    x1 = int(x1_input.get())
-    x2 = int(x2_input.get())
-    y1 = int(y1_input.get())
-    y2 = int(y2_input.get())
+    x1_val = int(x1_input.get())
+    x2_val = int(x2_input.get())
+    y1_val = int(y1_input.get())
+    y2_val = int(y2_input.get())
+
+    button.configure(command=crop_func(x1_val,x2_val,y1_val,y2_val))
 
     root_crop.mainloop()
 
-
-def crop_func():
-    global original_img, final_img, img_path, root_crop, x1, x2, y1, y2
-    root_crop.destroy()
-    original_img_arr = np.array(original_img)
-    w = original_img_arr.shape[1] 
-    h = original_img_arr.shape[0]
-
-    original_img_arr = original_img_arr[100:h-100,100:w-100]
-    original_img = Image.fromarray(original_img_arr)
-    final_img = ImageTk.PhotoImage(original_img)
-    img_canvas.create_image(500, 377, image=final_img)
-    img_canvas.image=final_img
-    
-    
 
 def black_white_func():
     global original_img, final_img, img_path
